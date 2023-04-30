@@ -2,6 +2,12 @@ from django.db import models
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 import uuid # Required for unique book instances
 
+# models using ForeignKey connect to model using single quote marks - ''
+# ForeignKey is used to connect many to one e.g. models.ForeignKey('Author')
+
+# models using ManyToMany connect to model using model class name e.g. Genre
+
+
 # Create your models here.
 class Genre(models.Model):
     """Model representing a book genre."""
@@ -9,6 +15,16 @@ class Genre(models.Model):
         help_text='Enter a book genre (e.g. Science Fiction)')
     
     def ___str___(self):
+        """String for representing the Model"""
+        return self.name
+    
+
+class Language(models.Model):
+    """Model representing a book Language"""
+    name = models.CharField(max_length=200,
+        help_text='Enter the book language (e.g. English)')
+    
+    def __str__(self):
         """String for representing the Model"""
         return self.name
     
@@ -30,6 +46,8 @@ class Book(models.Model):
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
     genre = models.ManyToManyField(Genre, help_text='Select genre for this book')
+
+    language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         """String for representing the Model object"""
@@ -59,8 +77,7 @@ class BookInstance(models.Model):
         ('r', 'Reserved'),
     )
 
-    status = models.CharField
-    (
+    status = models.CharField(
         max_length = 1,
         choices = LOAN_STATUS,
         blank = True,
@@ -83,7 +100,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
 
     date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateFiled(null=True, blank=True)
+    date_of_death = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -95,3 +112,5 @@ class Author(models.Model):
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
         return reverse('authore-detail', args=[str(self.id)])
+    
+
