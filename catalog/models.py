@@ -81,6 +81,12 @@ class Book(models.Model):
         """Returns the URL to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
     
+    def display_genre(self):
+        """Create string for the Genre data. To display it in admin page."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+    
+    display_genre.short_description = 'Genre'
+    
 
 class Imprint(models.Model):
     """Model representing a Book Instance Imprint"""
