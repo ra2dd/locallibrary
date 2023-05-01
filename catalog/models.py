@@ -7,6 +7,30 @@ import uuid # Required for unique book instances
 
 # models using ManyToMany connect to model using model class name e.g. Genre
 
+# changing model functions doesn't affect the database and migrations
+
+
+# Generating Isbn
+
+import random
+
+def getRandomISBN():
+    a = 0
+    b = 9999999999999
+
+    randomNumber = random.randint(a, b)
+
+    rnLength = len(str(randomNumber))
+
+    if(rnLength < 13):
+        zeros = ''
+        for x in range(13 - rnLength):
+            zeros += '0'
+        randomNumber = f'{ zeros }{ str(randomNumber) }'
+
+    # print(randomNumber)
+    return randomNumber
+
 
 # Create your models here.
 class Genre(models.Model):
@@ -14,7 +38,7 @@ class Genre(models.Model):
     name = models.CharField(max_length=200, 
         help_text='Enter a book genre (e.g. Science Fiction)')
     
-    def ___str___(self):
+    def __str__(self):
         """String for representing the Model"""
         return self.name
     
@@ -40,7 +64,7 @@ class Book(models.Model):
     summary = models.TextField(max_length=1000, 
         help_text='Enter a brief description of the book')
     
-    isbn = models.CharField('ISBN', max_length=13, unique=True,
+    isbn = models.CharField('ISBN', max_length=13, unique=True, default=getRandomISBN,
         help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
     
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
@@ -107,10 +131,9 @@ class Author(models.Model):
 
     def __str__(self):
         """String for representing the Model object"""
-        return f'{ self.last_name }, { self.first_name }'
+        return f'{ self.first_name } { self.last_name }'
     
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
         return reverse('authore-detail', args=[str(self.id)])
     
-
