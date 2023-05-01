@@ -7,6 +7,10 @@ admin.site.register(Genre)
 admin.site.register(Language)
 admin.site.register(Imprint)
 
+# Inline Book for editing it inside Author detail view
+class BookInline(admin.StackedInline):
+    model = Book
+    readonly_fields = ['isbn']
 
 # Define the admin class
 class AuthorAdmin(admin.ModelAdmin):
@@ -15,6 +19,8 @@ class AuthorAdmin(admin.ModelAdmin):
     
     # Display in detail view
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
+
+    inlines = [BookInline]
 
 # Register the admin class with the associated model
 admin.site.register(Author, AuthorAdmin)
