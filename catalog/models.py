@@ -82,6 +82,16 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
     
 
+class Imprint(models.Model):
+    """Model representing a Book Instance Imprint"""
+    name = models.CharField(max_length=200,
+        help_text='Enter the book imprint')
+    
+    def __str__(self):
+        """String for representing the Model"""
+        return self.name
+    
+
 class BookInstance(models.Model):
     """Model representing a specific copy of th physical book"""
 
@@ -90,7 +100,8 @@ class BookInstance(models.Model):
     
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
 
-    imprrint = models.CharField(max_length=200)
+    imprint = models.ForeignKey('Imprint', on_delete=models.SET_NULL, null=True,
+        help_text='Enter the imprint for this book.')
 
     due_back = models.DateField(null=True, blank=True)
 
