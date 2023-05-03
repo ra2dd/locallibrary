@@ -37,5 +37,10 @@ class BookListView(generic.ListView):
     # queryset = Book.objects.filter(language__name__icontains='english')[:3] # get 3 books that were written in english
     # template_name = 'books/specify_your_own_template_name_and_location'
 
+    """
     def get_queryset(self):
         return Book.objects.filter(language__name__icontains='english')[:3]
+    """
+    
+class BookDetailView(generic.DetailView):
+    model = Book
