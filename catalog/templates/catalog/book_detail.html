@@ -11,7 +11,7 @@
 
     <p>
         <strong>Summary:</strong>
-        {{ book.summary }}
+        {{ object.summary }}
     </p>
 
     <p>
@@ -32,6 +32,10 @@
     <div style="margin: 20px 0 0 20px">
         <h4>Copies</h4>
 
+        <!-- 
+            bookinstance_set is a method for getting a model associated with 
+            the model we are using based on primary key
+        -->
         {% for copy in book.bookinstance_set.all %}
             <hr>
             <p class="

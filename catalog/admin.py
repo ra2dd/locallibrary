@@ -29,7 +29,7 @@ admin.site.register(Author, AuthorAdmin)
 class BookInstanceInline(admin.TabularInline):
     model = BookInstance
     # book field is excluded automatically because it goes inline to book model with relationship
-    fields = ['book', 'imprint', 'status']
+    fields = ['book', 'id', 'imprint', 'status', 'due_back',]
 
 # Register the Admin classes for Book using the decorator
 # Decorator is the function that is run before the function that you pass to decorator
