@@ -5,7 +5,7 @@
 
     <p>
         <strong>Author:</strong>
-        <a href=""> {{ book.author }}</a>
+        <a href="{{ book.author.get_absolute_url }}"> {{ book.author }}</a>
         <!-- author detail link not yet defined -->
     </p>
 

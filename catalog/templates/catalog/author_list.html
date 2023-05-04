@@ -6,9 +6,21 @@
         <ul>
             {% for author in author_list %}
                 <li>
-                    <a href="">
+                    <a href="{{ author.get_absolute_url }}">
                         {{ author.first_name }} {{ author.last_name }}
                     </a>
+
+                    {% if author.date_of_birth %}
+                        <span style="font-size:0.8rem; padding-left: 0.3vw;">
+                            ( {{ author.date_of_birth }}
+                            
+                            {% if author.date_of_death %}
+                                 - {{ author.date_of_death }} )
+                            {% else %}
+                                 - )
+                            {% endif %}
+                        </span>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

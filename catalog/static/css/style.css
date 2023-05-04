@@ -4,3 +4,13 @@
     padding: 0;
     list-style: none;
 }
+
+.small-text
+{
+    font-size: 0.5rem;
+}
+
+p
+{
+    background-color: aqua;
+}
