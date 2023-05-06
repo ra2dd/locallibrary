@@ -28,7 +28,7 @@
         {% for book in author.book_set.all %}
             <hr>
 
-            <p style="font-size: 1.1em">
+            <p>
                 <strong>Title:</strong>
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
             </p>

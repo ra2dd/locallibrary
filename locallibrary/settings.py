@@ -25,6 +25,8 @@ SECRET_KEY = 'django-insecure-i5bdxtk3#i2g1g@t5c-ldt%7k8%y0_i(2d=*jf6c+1c9f0bjyv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+import os
+
 ALLOWED_HOSTS = []
 
 
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'locallibrary.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +124,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+
+LOGIN_REDIRECT_URL = '/'
