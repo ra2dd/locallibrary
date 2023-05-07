@@ -44,6 +44,10 @@
                                 </li>
 
                                 <li>
+                                    <a href="{% url 'my-borrowed' %}">My borrowed books</a>
+                                </li>
+
+                                <li>
                                     <a href="{% url 'logout' %}?next={{ request.path }}">
                                         Logout
                                     </a>
