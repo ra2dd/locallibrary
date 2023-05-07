@@ -87,6 +87,6 @@ class AllBooksBorrowedListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return(
             BookInstance.objects
-            .filter(status_exact='o')
+            .filter(status__exact='o')
             .order_by('due_back')
         )
