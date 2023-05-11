@@ -1,7 +1,13 @@
-from django.shortcuts import render
+import datetime
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 from .models import Author, Book, BookInstance, Genre
+from catalog.forms import RenewBookForm
 
 def index(request):
     """View function for home page of the site."""
@@ -92,3 +98,13 @@ class AllBooksBorrowedListView(PermissionRequiredMixin, generic.ListView):
             .filter(status__exact='o')
             .order_by('due_back')
         )
+    
+
+def renew_book_librarian(request, pk):
+    book_instance = get_object_or_404(BookInstance, pk=pk)
+
+    #If this is a POST request than process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with the data form the request (binding)
+        from = RenewBookForm(request.POST)
