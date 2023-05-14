@@ -34,6 +34,14 @@
                         Borrower:
                         {{ bookinst.borrower.get_username }}
                     </p>
+
+                    <p>
+                        {% if perms.catalog.can_mark_returned %}
+                            <a href="{% url 'renew-book-librarian' bookinst.id %}">
+                                Change renewal date
+                            </a>
+                        {% endif %}
+                    </p>
                 </section>
                 
                 <hr>
@@ -41,6 +49,6 @@
         </div>
 
     {% else %}
-
+        <p>There are no books borrowed.</p>
     {% endif %}
 {% endblock %}

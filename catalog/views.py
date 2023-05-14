@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -98,9 +99,12 @@ class AllBooksBorrowedListView(PermissionRequiredMixin, generic.ListView):
             .filter(status__exact='o')
             .order_by('due_back')
         )
-    
 
+# Decorators for required login and permission    
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
+    """View function for renewing a specific BookInstance by librarian"""
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
     # If this is a POST request than process the Form data
