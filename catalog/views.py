@@ -1,9 +1,10 @@
 import datetime
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -135,3 +136,16 @@ def renew_book_librarian(request, pk):
     }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
+
+class AuthorCreate(CreateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': datetime.date.today()}
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    fields = '__all__' # Not recommended (Potential security issue if more fields added)
+
+class AuthorDelete(DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
