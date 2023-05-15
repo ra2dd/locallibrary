@@ -144,10 +144,14 @@ class AuthorCreate(PermissionRequiredMixin, CreateView):
 
     permission_required = 'catalog.can_modify_book_data'
 
-class AuthorUpdate(UpdateView):
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
     fields = '__all__' # Not recommended (Potential security issue if more fields added)
 
-class AuthorDelete(DeleteView):
+    permission_required = 'catalog.can_modify_book_data'
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+    permission_required = 'catalog.can_modify_book_data'

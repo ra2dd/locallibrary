@@ -2,25 +2,39 @@
 
 {% block content %}
 
-<h1>{{author.first_name}} {{author.last_name}} Details:</h1>
+    <h1>{{author.first_name}} {{author.last_name}} Details:</h1>
 
-{% if author.date_of_birth %}
-    <p>
-        <strong>Date of birth:</strong>
-        {{ author.date_of_birth }}
-    </p>
+    {% if author.date_of_birth %}
+        <p>
+            <strong>Date of birth:</strong>
+            {{ author.date_of_birth }}
+        </p>
 
-        {% if author.date_of_death %}
-            <p>
-                <strong>Date of death:</strong>
-                {{ author.date_of_death }}
-            </p>
-        {% else %}
-            <p>
-                <strong>Date of death:</strong>
-                -
-            </p>
-        {% endif %}
+            {% if author.date_of_death %}
+                <p>
+                    <strong>Date of death:</strong>
+                    {{ author.date_of_death }}
+                </p>
+            {% else %}
+                <p>
+                    <strong>Date of death:</strong>
+                    -
+                </p>
+            {% endif %}
+    {% endif %}
+
+    {% if perms.catalog.can_modify_book_data %}
+        <section>
+            <a href="{% url 'author-update' author.pk %}">
+                Update author data
+            </a>
+
+            <br>
+            
+            <a href="{% url 'author-delete' author.pk %}">
+                Delete author
+            </a>
+        </section>
     {% endif %}
 
     <div style="margin: 20px 0 0 20px">
