@@ -30,7 +30,7 @@
             </a>
 
             <br>
-            
+
             <a href="{% url 'author-delete' author.pk %}">
                 Delete author
             </a>
@@ -39,24 +39,30 @@
 
     <div style="margin: 20px 0 0 20px">
         <h4>Books:</h4>
-        {% for book in author.book_set.all %}
-            <hr>
 
-            <p>
-                <strong>Title:</strong>
-                <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-            </p>
+        {% if author.book_set.all.0 %}
+            {% for book in author.book_set.all %}
+                <hr>
 
-            <p class="small-text">
-                <strong>Genre</strong>
-                {{ book.genre.all|join:", "}}
-            </p>
+                <p>
+                    <strong>Title:</strong>
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                </p>
 
-            <p class="small-text">
-                <strong>Language</strong>
-                {{ book.language }}
-            </p>
-        {% endfor %}
+                <p class="small-text">
+                    <strong>Genre</strong>
+                    {{ book.genre.all|join:", "}}
+                </p>
+
+                <p class="small-text">
+                    <strong>Language</strong>
+                    {{ book.language }}
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>This author doesn't have any books assigned.</p>
+        {% endif %}
+
     </div>
 
 
