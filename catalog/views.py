@@ -137,10 +137,12 @@ def renew_book_librarian(request, pk):
 
     return render(request, 'catalog/book_renew_librarian.html', context)
 
-class AuthorCreate(CreateView):
+class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     initial = {'date_of_death': datetime.date.today()}
+
+    permission_required = 'catalog.can_modify_book_data'
 
 class AuthorUpdate(UpdateView):
     model = Author
