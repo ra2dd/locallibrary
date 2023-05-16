@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from .models import Author, Book, BookInstance, Genre
 from catalog.forms import RenewBookForm
+from .scripts import *
 
 def index(request):
     """View function for home page of the site."""
@@ -153,5 +154,11 @@ class AuthorUpdate(PermissionRequiredMixin, UpdateView):
 class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+    permission_required = 'catalog.can_modify_book_data'
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = ['title', 'author', 'isbn', 'genre', 'language']
 
     permission_required = 'catalog.can_modify_book_data'
