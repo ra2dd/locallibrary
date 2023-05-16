@@ -1,9 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Delete book - {{ book.title }} by {{ book.author }}</h1>
+    <h1>Delete book - "{{ book.title }}" <span style="font-size: 80%">by {{ book.author }}</span></h1>
 
-    <p>Are you sure you want to delete the book: {{ book.title }}</p>
+    <p>Are you sure you want to delete the book: "{{ book.title }}"?</p>
 
     <form action="" method="POST">
         {% csrf_token %}

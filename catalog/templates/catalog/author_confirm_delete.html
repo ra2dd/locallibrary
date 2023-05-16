@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Delete author - {{ author.first_name }} {{ author.last_name }}</h1>
 
-    <p>Are you sure you want to delete the author: {{ author }}</p>
+    <p>Are you sure you want to delete the author: {{ author }}?</p>
 
     <form action="" method="POST">
         {% csrf_token %}
