@@ -3,6 +3,7 @@ from django.urls import reverse # Used to generate URLs by reversing the URL pat
 import uuid # Required for unique book instances
 from django.contrib.auth.models import User
 from datetime import date
+from .scripts import *
 
 # models using ForeignKey connect to model using single quote marks - ''
 # ForeignKey is used to connect many to one e.g. models.ForeignKey('Author')
@@ -10,28 +11,6 @@ from datetime import date
 # models using ManyToMany connect to model using model class name e.g. Genre
 
 # changing model functions doesn't affect the database and migrations
-
-
-# Generating Isbn
-
-import random
-
-def getRandomISBN():
-    a = 0
-    b = 9999999999999
-
-    randomNumber = random.randint(a, b)
-
-    rnLength = len(str(randomNumber))
-
-    if(rnLength < 13):
-        zeros = ''
-        for x in range(13 - rnLength):
-            zeros += '0'
-        randomNumber = f'{ zeros }{ str(randomNumber) }'
-
-    # print(randomNumber)
-    return randomNumber
 
 
 # Create your models here.
