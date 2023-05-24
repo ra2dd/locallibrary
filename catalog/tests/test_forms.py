@@ -1,11 +1,11 @@
 import datetime
 
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from django.utils import timezone
 
 from catalog.forms import RenewBookForm
 
-class RenewBookFormTest(TestCase):
+class RenewBookFormTest(SimpleTestCase):
     def test_renew_form_date_field_label(self):
         form = RenewBookForm()
         self.assertTrue(form.fields['renewal_date'].label is None or 
