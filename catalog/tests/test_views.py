@@ -50,7 +50,7 @@ class AuthorListViewTest(TestCase):
 
 
 class LoanedBookInstancesByUserListViewTest(TestCase):
-    def SetUp(self):
+    def setUp(self):
         # Create two users
         test_user1 = User.objects.create_user(username='testuser1', password='fjo&*&d3h')
         test_user2 = User.objects.create_user(username='testuser2', password='J9cdj8we9')
@@ -67,8 +67,8 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
             title = 'Book Title',
             summary = 'My book summary',
             isbn = '1895385629723',
-            author = test_author
-            language = test_language
+            author = test_author,
+            language = test_language,
         )
 
         # Create genre as a post step
@@ -84,11 +84,27 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
             status = 'm'
             BookInstance.objects.create(
                 book = test_book,
-                imprint = test_imprint
+                imprint = test_imprint,
                 due_back = return_date,
                 borrower = the_borrower,
                 status = status,
             )
+    
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('my-borrowed'))
+        self.assertRedirects(response, '/accounts/login/?next=/catalog/myborrowed/')
+
+    def test_logged_in_uses_correct_template(self):
+        login = self.client.login(username='testuser1', password='fjo&*&d3h')
+        response = self.client.get(reverse('my-borrowed'))
+
+        # Check out user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        # Check we used correct template
+        self.assertTemplateUsed(response, 'catalog/bookinstance_list_user_borrowed.html')
 
         
 
