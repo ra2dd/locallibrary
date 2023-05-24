@@ -1,7 +1,11 @@
+import datetime
+
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth.models import User # Required to assign User as a borrower
 
-from catalog.models import Author
+from catalog.models import Author, BookInstance, Book, Genre, Language, Imprint
 
 class AuthorListViewTest(TestCase):
     @classmethod
@@ -42,5 +46,49 @@ class AuthorListViewTest(TestCase):
         self.assertTrue('is_paginated' in response.context)
         self.assertTrue(response.context['is_paginated'] == True)
         self.assertEqual(len(response.context['author_list']), 3)
+
+
+
+class LoanedBookInstancesByUserListViewTest(TestCase):
+    def SetUp(self):
+        # Create two users
+        test_user1 = User.objects.create_user(username='testuser1', password='fjo&*&d3h')
+        test_user2 = User.objects.create_user(username='testuser2', password='J9cdj8we9')
+
+        test_user1.save()
+        test_user2.save()
+
+        # Create a book
+        test_author = Author.objects.create(first_name='John', last_name='Smith')
+        test_genre = Genre.objects.create(name='Fantasy')
+        test_language = Language.objects.create(name='English')
+        test_imprint = Imprint.objects.create(name='Somewhere New')
+        test_book = Book.objects.create(
+            title = 'Book Title',
+            summary = 'My book summary',
+            isbn = '1895385629723',
+            author = test_author
+            language = test_language
+        )
+
+        # Create genre as a post step
+        genre_objects_for_book = Genre.objects.all()
+        test_book.genre.set(genre_objects_for_book) # Direct assigment of many-to-many types not allowed.
+        test_book.save()
+
+        # Create 30 BookInstace objects
+        number_of_book_copies = 30
+        for book_copy in range(number_of_book_copies):
+            return_date = timezone.localtime() + datetime.timedelta(days=book_copy%5)
+            the_borrower = test_user1 if book_copy % 2 else test_user2
+            status = 'm'
+            BookInstance.objects.create(
+                book = test_book,
+                imprint = test_imprint
+                due_back = return_date,
+                borrower = the_borrower,
+                status = status,
+            )
+
         
 
