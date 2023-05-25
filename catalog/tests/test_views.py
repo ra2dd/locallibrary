@@ -106,5 +106,67 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
         # Check we used correct template
         self.assertTemplateUsed(response, 'catalog/bookinstance_list_user_borrowed.html')
 
+    def test_only_borrowed_books_in_list(self):
+        login = self.client.login(username='testuser1', password='fjo&*&d3h')
+        response = self.client.get(reverse('my-borrowed'))
+
+        # Check out user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        # Check that initially we don't have any books in list (none on loan)
+        self.assertTrue('bookinstance_list' in response.context)
+        self.assertEqual(len(response.context['bookinstance_list']), 0)
+
+        # Change all books to be on loan
+        books = BookInstance.objects.all()[:10]
+
+        for book in books:
+            book.status = 'o'
+            book.save()
+        
+        # Check that now we jave borrowed books in the list
+        response = self.client.get(reverse('my-borrowed'))
+        # Check out user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue('bookinstance_list' in response.context)
+
+        # Confirm all books belong to testuser1 and are on loan
+        for bookitem in response.context['bookinstance_list']:
+            self.assertEqual(response.context['user'], bookitem.borrower)
+            self.assertEqual(bookitem.status, 'o')
+
+    def test_pages_orderd_by_due_date(self):
+        # Change all books to be on loan
+        for book in BookInstance.objects.all():
+            book.status = 'o'
+            book.save()
+
+        login = self.client.login(username='testuser1', password='fjo&*&d3h')
+        response = self.client.get(reverse('my-borrowed'))
+
+        # Check out user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        # Confirm that of the items, only 10 are displayed due to pagination
+        self.assertEqual(len(response.context['bookinstance_list']), 10)
+
+        last_date = 0
+        for book in response.context['bookinstance_list']:
+            if last_date == 0:
+                last_date = book.due_back
+            else:
+                self.assertTrue(last_date <= book.due_back)
+                last_date = book.due_back
+
+        
+        
+
         
 
