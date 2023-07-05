@@ -59,23 +59,27 @@ class AuthorCreateViewTest(TestCase):
         test_user3.save()
         test_user4.save()
 
-        # Give test_user2 permission to renew books.
-        permission = Permission.objects.get(name='Set book as returned')
+        # Give test_user2 permission to modify book records and information about them
+        permission = Permission.objects.get(name='Add or modify book records and information about them')
         test_user4.user_permissions.add(permission)
         test_user4.save()
 
     def test_view_url_exists_at_desired_location(self):
-        response = self.client.get('/catalog/author/create')
+        login = self.client.login(username='testuser4', password='9dj2q8f')
+        response = self.client.get('/catalog/author/create/')
+
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
         login = self.client.login(username='testuser4', password='9dj2q8f')
-
         response = self.client.get(reverse('author-create'))
+
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
+        login = self.client.login(username='testuser4', password='9dj2q8f')
         response = self.client.get(reverse('author-create'))
+
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'catalog/author_form.html')
 
