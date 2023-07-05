@@ -53,22 +53,23 @@ class AuthorListViewTest(TestCase):
 class AuthorCreateViewTest(TestCase):
     def setUp(self):
         # Create two users
-        test_user1 = User.objects.create_user(username='testuser1', password='fjo&*&d3h')
-        test_user2 = User.objects.create_user(username='testuser2', password='J9cdj8we9')
+        test_user3 = User.objects.create_user(username='testuser3', password='nd392dn')
+        test_user4 = User.objects.create_user(username='testuser4', password='9dj2q8f')
 
-        test_user1.save()
+        test_user3.save()
+        test_user4.save()
 
         # Give test_user2 permission to renew books.
         permission = Permission.objects.get(name='Set book as returned')
-        test_user2.user_permissions.add(permission)
-        test_user2.save()
+        test_user4.user_permissions.add(permission)
+        test_user4.save()
 
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/catalog/author/create')
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
-        login = self.client.login(username='testuser2', password='J9cdj8we9')
+        login = self.client.login(username='testuser4', password='9dj2q8f')
 
         response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
@@ -85,24 +86,17 @@ class AuthorCreateViewTest(TestCase):
         self.assertTrue(response.url.startswith('/accounts/login/'))
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
-        login = self.client.login(username='testuser1', password='fjo&*&d3h')
+        login = self.client.login(username='testuser3', password='nd392dn')
         response = self.client.get(reverse('author-create'))
 
         # Check that it doesn't let us access the page - we don't have permissions
         self.assertEqual(response.status_code, 403)
     
     def test_logged_in_with_correct_permission(self):
-        login = self.client.login(username='testuser2', password='J9cdj8we9')
+        login = self.client.login(username='testuser4', password='9dj2q8f')
         response = self.client.get(reverse('author-create'))
 
         self.assertEqual(response.status_code, 200)    
-
-    def test_logged_in_with_permission_borrowed_book(self):
-        login = self.client.login(username='testuser2', password='J9cdj8we9')
-        response = self.client.get(reverse('author-create'))
-
-        # Check that it lets us login - this is our book and we have the right permissions.
-        self.assertEqual(response.status_code, 200)
 
 
 class LoanedBookInstancesByUserListViewTest(TestCase):
