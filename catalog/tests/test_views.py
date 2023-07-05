@@ -102,6 +102,15 @@ class AuthorCreateViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)    
 
+    def test_form_date_of_death_is_today(self):
+        login = self.client.login(username='testuser4', password='9dj2q8f')
+        response = self.client.get(reverse('author-create'))
+        
+        self.assertEqual(response.status_code, 200)
+
+        date_today = datetime.date.today()
+        self.assertEqual(response.context['form'].initial['date_of_death'], date_today)
+        
 
 class LoanedBookInstancesByUserListViewTest(TestCase):
     def setUp(self):
