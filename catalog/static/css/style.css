@@ -1,3 +1,44 @@
+body
+{
+    margin: 2% 4%;
+}
+
+/*
+    Appling grid layout to the page
+*/
+.grid-container
+{
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "sidebar content"
+        "footer footer";
+        grid-template-columns: 1fr 5fr;
+        gap: 2vw;
+}
+
+header
+{
+    grid-area: header;
+}
+
+aside
+{
+    grid-area: sidebar;
+}
+
+.content-container
+{
+    grid-area: content;
+}
+
+footer
+{
+    grid-area: footer;
+}
+
+
+
 .sidebar-nav
 {
     margin-top: 20px;
