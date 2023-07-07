@@ -38,6 +38,7 @@ aside
 .content-container
 {
     grid-area: content;
+    margin-left: 0.5vw;
 }
 
 footer
